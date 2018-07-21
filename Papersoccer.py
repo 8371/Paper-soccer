@@ -175,7 +175,7 @@ def pilka():
                     test=0
                 if event.key == pygame.K_d:
                     print(zapis)
-                if event.key == pygame.K_f: # odpala poczatek, wypisuje zapis, usuwa os ruch
+                if event.key == pygame.K_f: 
                     start()                    
                     print(zapis)
                     l1=zapis
@@ -187,8 +187,8 @@ def pilka():
                 if event.key == pygame.K_u:
                     test=0
                 if event.key == pygame.K_r:
-                    start() #odpala poczatkowe ustawienie
-                if event.key == pygame.K_p: # wyswietla srodek + tabele ustawiona
+                    start()
+                if event.key == pygame.K_p: 
                     print(srodek)
                     for row in table:            
                         print(' '.join([str(elem) for elem in row]))
