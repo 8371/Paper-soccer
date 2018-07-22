@@ -4,14 +4,14 @@ from pprint import pprint
 #stores information about movements
 made_movements=''
 def start():
-    global center,table,board,boisko,position_x,position_y,o,draw,color,possible_line_directions,table,made_movements,change_color,x
+    global center,table,board,court,position_x,position_y,o,draw,color,possible_line_directions,table,made_movements,change_color,x
     #Center where we start game
     center=[7,5]
     table = [['0'] * 11 for i in range(15)]
     #Creating table for game, board in pygame
     board = pygame.display.set_mode((382,565))
-    boisko = pygame.image.load('boisko.png')
-    board.blit(boisko,(0,0))
+    court = pygame.image.load('court.png')
+    board.blit(court,(0,0))
     #coordinates in pygame board
     position_x,position_y=[191],[282]
     #line length pixels
@@ -197,7 +197,6 @@ def game():
                 if event.key == pygame.K_f:
                     #When press key F clean board and restores the current state without last move
                     start()                    
-                    print(made_movements)
                     l1=made_movements
                     l1=l1[:-1]
                     l=len(l1)
