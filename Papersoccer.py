@@ -44,10 +44,10 @@ def start():
     for i in range(2):
         table[2][7+i]='46'
     table[1][1]='728'
-    table[1][3]='7'
+    table[1][3]='789'
     table[1][4]='98'
     table[1][6]='78'
-    table[1][7]='9'
+    table[1][7]='789'
     table[1][9]='98'
     table[2][1]='2846'
     table[2][4]='6'
@@ -70,9 +70,6 @@ def start():
     table[13][7]='123'
     table[13][8]='123'
     table[13][9]='23'
-
-    ## .....................
-
 def Result(x,x1):
     #display information about possible line directions and who is making move
     font = pygame.font.SysFont("comicsansms",25)
@@ -81,6 +78,12 @@ def Result(x,x1):
     font = pygame.font.SysFont("comicsansms",15)
     Player = font.render("Move : "+str(x1), True,(0,0,0))
     board.blit(Player, (15,530))
+    if str(x1) == 'Player 1':
+        alfa=(0,0,0)
+    else:
+        alfa=(255,0,0)
+    Move = font.render("____", True,alfa)
+    board.blit(Move, (15,530))    
 def make_move(x):
     if x==1:
         make_movekkk(1,9,-o,+o,+1,-1)
@@ -159,8 +162,7 @@ def check_win():
         if change_color == -1:
             print('Win Player 2')
         else:
-            print('Win Player 1')
-        
+            print('Win Player 1')  
         end()
     #when someone shoots a goal
     if center==[13,4] or center==[13,5] or center ==[13,6]:
@@ -169,7 +171,6 @@ def check_win():
     if center==[1,4] or center==[1,5] or center ==[1,6]:
         print('Win Player 1')
         end()    
-        
 def game():
     global center,made_movements
     while True:
