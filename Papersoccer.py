@@ -1,16 +1,31 @@
 import pygame
 import time
 from pprint import pprint
-zapis=''
+#stores information about movements
+made_movements=''
 def start():
-    global srodek,table,ekran,boisko,lenx,leny,o,draw,color,out,table,zapis,zmianax,x
-    srodek=[7,5]
+    global center,table,board,boisko,position_x,position_y,o,draw,color,possible_line_directions,table,made_movements,change_color,x
+    #Center where we start game
+    center=[7,5]
     table = [['0'] * 11 for i in range(15)]
-    ekran = pygame.display.set_mode((382,565))
+    #Creating table for game, board in pygame
+    board = pygame.display.set_mode((382,565))
     boisko = pygame.image.load('boisko.png')
-    ekran.blit(boisko,(0,0))
-    lenx,leny,o,draw,color,out=[191],[282],46,3,(0,0,0),8
+    board.blit(boisko,(0,0))
+    #coordinates in pygame board
+    position_x,position_y=[191],[282]
+    #line length pixels
+    o=46
+    #size draw line
+    draw=3
+    #color first draw line
+    color=(0,0,0)
+    #possible line directions
+    possible_line_directions=8
     pygame.init()
+    #change color players
+    change_color=-1
+    #This table... include in foto Image_1.png.............
     for i in range(15):                      
         table[i][0]='471'
     for i in range(15):                      
@@ -26,25 +41,23 @@ def start():
     table[2][1]='2846'
     table[2][4]='6'
     table[2][6]='4'
-    table[1][6]='8'
-    table[1][4]='8'
     table[2][9]='468'
     table[1][7]='9'
     table[1][3]='7'
     for i in range(2):
         table[1][2+i]='798'
-    table[1][4]='9'
+    table[1][4]='98'
     table[1][1]='728'
     for i in range(2):
         table[1][7+i]='789'
-    table[1][6]='7'
+    table[1][6]='78'
     table[1][9]='98'
     table[13][2]='123'
     table[13][1]='123'
     table[13][3]='123'
     table[12][2]='46'
     table[12][3]='46'
-    table[12][1]='4'
+    table[12][1]='42'
     table[13][4]='3'
     table[12][4]='6'
     table[13][4]='23'
@@ -54,146 +67,153 @@ def start():
     table[12][7]='46'
     table[12][8]='46'
     table[13][6]='12'
-    table[13][9]='3'
     table[13][9]='23'
-    x=-1
-    zmianax=-1
-def cofka():
-    e=2
-def przycisk(x,x1):
+    ## .....................
+
+def Result(x,x1):
+    #display information about possible line directions and who is making move
     font = pygame.font.SysFont("comicsansms",25)
     text = font.render("X: "+str(x), True,(0,0,0))
-    ekran.blit(text, (0,0))
+    board.blit(text, (0,0))
     font = pygame.font.SysFont("comicsansms",15)
-    gracz = font.render("Move : "+str(x1), True,(0,0,0))
-    ekran.blit(gracz, (15,530))
-
-    
-def zmianakkk(x1,x2,x3,x4,x5,x6):
-    global out,color,zmianax,zapis
-    zapis=zapis+str(x1)
-    if table[srodek[0]+x5][srodek[1]+x6]=='0':
-        zmianax=zmianax*-1
-        #zapis+='.'
-    if str(x1) not in table[srodek[0]+x5][srodek[1]+x6]:
-        table[srodek[0]][srodek[1]]+=str(x2)
-        srodek[0]+=x5
-        srodek[1]+=x6
-        table[srodek[0]][srodek[1]]+=str(x1)
-        pygame.draw.line(ekran,color,(lenx[0],leny[0]),(lenx[0]+x3,leny[0]+x4),draw)
-        lenx[0] += x3
-        leny[0] += x4
-        checkx()
-        pygame.draw.rect(ekran, (255,255,255),(0,0,80,30))
-        pygame.draw.rect(ekran, (255,255,255),(0,520,130,530))
-        if zmianax==1:            
-            color=(255,0,0)
-            graczx='Player'
-        if zmianax==-1:
-            graczx='Pc'
-            color=(0,0,0)
-        przycisk(out,graczx)
-def zmiana(x):
+    Player = font.render("Move : "+str(x1), True,(0,0,0))
+    board.blit(Player, (15,530))
+def make_move(x):
     if x==1:
-        zmianakkk(1,9,-o,+o,+1,-1)
+        make_movekkk(1,9,-o,+o,+1,-1)
     if x==3:
-        zmianakkk(3,7,+o,+o,+1,+1)
+        make_movekkk(3,7,+o,+o,+1,+1)
     if x==7:
-        zmianakkk(7,3,-o,-o,-1,-1)
+        make_movekkk(7,3,-o,-o,-1,-1)
     if x==9:
-        zmianakkk(9,1,+o,-o,-1,+1)
+        make_movekkk(9,1,+o,-o,-1,+1)
     if x==4:
-        zmianakkk(4,6,-o,+0,+0,-1)
+        make_movekkk(4,6,-o,+0,+0,-1)
     if x==8:
-        zmianakkk(8,2,+0,-o,-1,+0)
+        make_movekkk(8,2,+0,-o,-1,+0)
     if x==2:
-        zmianakkk(2,8,+0,+o,+1,+0)
+        make_movekkk(2,8,+0,+o,+1,+0)
     if x==6:
-        zmianakkk(6,4,+o,+0,+0,+1)
-def checkx():
-    global srodek,out
-    out=8
+        make_movekkk(6,4,+o,+0,+0,+1)
+def make_movekkk(x1,x2,x3,x4,x5,x6):
+    global possible_line_directions,color,change_color,made_movements
+    #If new move change color next player
+    if table[center[0]+x5][center[1]+x6]=='0':
+        change_color=change_color*-1
+    #check possible to make move
+    if str(x1) not in table[center[0]+x5][center[1]+x6]:
+        made_movements=made_movements+str(x1)
+        #adding number to table
+        table[center[0]][center[1]]+=str(x2)
+        center[0]+=x5
+        center[1]+=x6
+        table[center[0]][center[1]]+=str(x1)
+        #draw line
+        pygame.draw.line(board,color,(position_x[0],position_y[0]),(position_x[0]+x3,position_y[0]+x4),draw)
+        position_x[0] += x3
+        position_y[0] += x4
+        #check number possible line directions for display
+        check_possible_line_directions()
+        pygame.draw.rect(board, (255,255,255),(0,0,80,30))
+        pygame.draw.rect(board, (255,255,255),(0,520,130,530))
+        if change_color==1:            
+            color=(255,0,0)
+            Playerx='Player 2'
+        if change_color==-1:
+            Playerx='Player 1'
+            color=(0,0,0)
+        Result(possible_line_directions,Playerx)
+def check_possible_line_directions():
+    global center,possible_line_directions
+    possible_line_directions=8
     try:
-        if '6' in table[srodek[0]][srodek[1]+1]:
-            out-=1
-        if '4' in table[srodek[0]][srodek[1]-1]:
-            out-=1
-        if '8' in table[srodek[0]-1][srodek[1]]:
-            out-=1
-        if '2' in table[srodek[0]+1][srodek[1]]:
-            out-=1
-        if '7' in table[srodek[0]-1][srodek[1]-1]:
-            out-=1
-        if '3' in table[srodek[0]+1][srodek[1]+1]:
-            out-=1
-        if '9' in table[srodek[0]-1][srodek[1]+1]:
-            out-=1
-        if '1' in table[srodek[0]+1][srodek[1]-1]:
-            out-=1
+        if '6' in table[center[0]][center[1]+1]:
+            possible_line_directions-=1
+        if '4' in table[center[0]][center[1]-1]:
+            possible_line_directions-=1
+        if '8' in table[center[0]-1][center[1]]:
+            possible_line_directions-=1
+        if '2' in table[center[0]+1][center[1]]:
+            possible_line_directions-=1
+        if '7' in table[center[0]-1][center[1]-1]:
+            possible_line_directions-=1
+        if '3' in table[center[0]+1][center[1]+1]:
+            possible_line_directions-=1
+        if '9' in table[center[0]-1][center[1]+1]:
+            possible_line_directions-=1
+        if '1' in table[center[0]+1][center[1]-1]:
+            possible_line_directions-=1
     except:
         print('error')
-        print(srodek)
-def koniec():
-    zapis=''
-    if input('ok')=='1':
-        start()
-
-def check():
-    if out==0:
-        print('end')
-        koniec()
-    if srodek==[13,4] or srodek==[13,5] or srodek ==[13,6]:
-        print('win')
-        koniec()
-    if srodek==[1,4] or srodek==[1,5] or srodek ==[1,6]:
-        print('win')
-        koniec()    
+        print(center)
+def end():
+    global made_movements
+    made_movements=''
+    start()
+def check_win():
+    #if possible line directions is 0 so game over and win opponent
+    if possible_line_directions==0:
+        if change_color == -1:
+            print('Win Player 2')
+        else:
+            print('Win Player 1')
         
-def pilka():
-    global srodek,zapis
+        end()
+    #when someone shoots a goal
+    if center==[13,4] or center==[13,5] or center ==[13,6]:
+        print('Win Player 2')
+        end()
+    if center==[1,4] or center==[1,5] or center ==[1,6]:
+        print('Win Player 1')
+        end()    
+        
+def game():
+    global center,made_movements
     while True:
-        check()
+        #check for somebody win 
+        check_win()
         for event in pygame.event.get():
+            #if player press key make move
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_KP6:                    
-                    zmiana(6)
+                    make_move(6)
                 if event.key == pygame.K_KP2:                    
-                    zmiana(2)
+                    make_move(2)
                 if event.key == pygame.K_KP8:
-                    zmiana(8)                                       
+                    make_move(8)                                       
                 if event.key == pygame.K_KP4:                    
-                    zmiana(4)
+                    make_move(4)
                 if event.key == pygame.K_KP9:                   
-                    zmiana(9)
+                    make_move(9)
                 if event.key == pygame.K_KP7:                    
-                    zmiana(7)
+                    make_move(7)
                 if event.key == pygame.K_KP1:                    
-                    zmiana(1)
+                    make_move(1)
                 if event.key == pygame.K_KP3:                    
-                    zmiana(3)
-                if event.key == pygame.K_y:
-                    test=0
+                    make_move(3)
                 if event.key == pygame.K_d:
-                    print(zapis)
-                if event.key == pygame.K_f: 
+                    print(made_movements)
+                    print(center)
+                if event.key == pygame.K_f:
+                    #When press key F clean board and restores the current state without last move
                     start()                    
-                    print(zapis)
-                    l1=zapis
+                    print(made_movements)
+                    l1=made_movements
                     l1=l1[:-1]
                     l=len(l1)
-                    zapis=''
+                    made_movements=''
                     for i in range(l):
-                        zmiana(int(l1[i]))           
-                if event.key == pygame.K_u:
-                    test=0
+                        make_move(int(l1[i]))           
                 if event.key == pygame.K_r:
-                    start()
-                if event.key == pygame.K_p: 
-                    print(srodek)
+                    #When press key r reset game
+                    made_movements=''
+                    start() 
+                if event.key == pygame.K_p: # display center + tabele 
+                    print(center)
                     for row in table:            
                         print(' '.join([str(elem) for elem in row]))
             if event.type == pygame.QUIT:
                 pygame.quit()
         pygame.display.update()
 start()
-pilka()
+game()
