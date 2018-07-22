@@ -2,6 +2,8 @@ import pygame
 import time
 from pprint import pprint
 #stores information about movements
+#make moves with num keypad 1-9
+#undo move with key "f"
 made_movements=''
 def start():
     global center,table,board,court,position_x,position_y,o,draw,color,possible_line_directions,table,made_movements,change_color,x
