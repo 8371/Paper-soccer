@@ -28,6 +28,7 @@ def start():
     #change color players
     change_color=-1
     #This table... include in foto Image_1.png.............
+    #so that the player does not go beyond the map
     for i in range(15):                      
         table[i][0]='471'
     for i in range(15):                      
